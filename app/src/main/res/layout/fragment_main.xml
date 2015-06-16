@@ -12,16 +12,16 @@
     tools:context=".MainActivityFragment">
 
     <SearchView
+        android:id="@+id/searchView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/searchView"
         android:layout_gravity="center_horizontal"
         android:maxWidth="300dp" />
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

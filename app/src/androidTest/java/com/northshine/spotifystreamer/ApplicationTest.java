@@ -1,4 +1,4 @@
-package com.northshine.spotifystreamer1;
+package com.northshine.spotifystreamer;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
