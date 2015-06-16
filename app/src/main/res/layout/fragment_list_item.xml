@@ -7,18 +7,21 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:paddingTop="10dp">
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/imageView" />
+            android:id="@+id/imageView"
+            android:contentDescription="@string/artist_icon_alt" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
+            android:text="@string/artist_name_text"
             android:id="@+id/textView"
             android:layout_gravity="right" />
     </LinearLayout>
