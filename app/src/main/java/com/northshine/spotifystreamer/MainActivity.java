@@ -14,8 +14,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArtistListItemActivityFragment artistListItemActivityFragment = ((ArtistListItemActivityFragment)getSupportFragmentManager()
-                .findFragmentById(R.id.artistListView));
+//        ArtistListItemActivityFragment artistListItemActivityFragment = ((ArtistListItemActivityFragment)getSupportFragmentManager()
+//                .findFragmentById(R.id.artistListView));
     }
 
     @Override

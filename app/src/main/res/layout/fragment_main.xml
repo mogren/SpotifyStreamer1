@@ -18,10 +18,10 @@
         android:layout_gravity="center_horizontal"
         android:maxWidth="300dp" />
 
-    <ListView
-        android:id="@+id/artistListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal" />
+        <ListView
+            android:id="@+id/artistListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
