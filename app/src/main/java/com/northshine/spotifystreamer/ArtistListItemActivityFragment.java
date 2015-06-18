@@ -35,11 +35,9 @@ public class ArtistListItemActivityFragment extends Fragment {
     private List<String> getArtists(String artist) {
 
         List<String> artistList = new ArrayList<>();
-        artistList.add(artist + " 1");
-        artistList.add(artist + " 2");
-        artistList.add(artist + " 3");
-        artistList.add(artist + " 4");
-
+        for (int i = 1; i <= 15; i++) {
+            artistList.add(artist + " " + i);
+        }
         return artistList;
     }
 }

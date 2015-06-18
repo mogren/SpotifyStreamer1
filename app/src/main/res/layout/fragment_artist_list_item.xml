@@ -8,7 +8,7 @@
     android:clickable="true"
     android:orientation="horizontal"
     android:paddingTop="10dp"
-    tools:context="com.northshine.spotifystreamer.ArtistListItemActivityFragment">
+    tools:context=".ArtistListItemActivityFragment">
 
     <ImageView
         android:id="@+id/artistImageView"

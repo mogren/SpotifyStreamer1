@@ -5,4 +5,5 @@
     <string name="artist_icon_alt">ArtistIcon</string>
     <string name="artist_name_text">Some artist\'s name</string>
     <string name="title_activity_artist_list_item">ArtistListItemActivity</string>
+    <string name="action_refresh">Refresh</string>
 </resources>

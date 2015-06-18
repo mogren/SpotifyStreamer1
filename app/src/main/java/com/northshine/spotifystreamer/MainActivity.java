@@ -7,6 +7,8 @@ import android.view.MenuItem;
 
 import com.northshine.spotifystreamer1.R;
 
+import static com.northshine.spotifystreamer.MainActivityFragment.*;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,8 +16,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        ArtistListItemActivityFragment artistListItemActivityFragment = ((ArtistListItemActivityFragment)getSupportFragmentManager()
-//                .findFragmentById(R.id.artistListView));
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.artistListView, new ArtistListItemActivityFragment())
+//                    .commit();
+//        }
     }
 
     @Override
