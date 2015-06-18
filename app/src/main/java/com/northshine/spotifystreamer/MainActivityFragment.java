@@ -12,8 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +63,14 @@ public class MainActivityFragment extends Fragment {
         mArtistListViewAdapter = new ArrayAdapter<>(getActivity(), R.layout.fragment_text, R.id.someText, artistList);
         ListView lv = (ListView) rootView.findViewById(R.id.artistListView);
         lv.setAdapter(mArtistListViewAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String artistText = mArtistListViewAdapter.getItem(position);
+                Toast.makeText(getActivity(), artistText, Toast.LENGTH_SHORT).show();
+            }
+        });
         return rootView;
     }
 
@@ -87,8 +96,8 @@ public class MainActivityFragment extends Fragment {
         }
 
         if (id == R.id.action_artist_refresh) {
-            FetchArtistInfoTask weatherTask = new FetchArtistInfoTask();
-            weatherTask.execute("16951,se");
+            FetchArtistInfoTask artistInfoTask = new FetchArtistInfoTask();
+            artistInfoTask.execute("16951,se");
             return true;
         }
 
