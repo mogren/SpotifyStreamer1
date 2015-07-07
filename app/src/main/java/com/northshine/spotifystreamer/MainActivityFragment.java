@@ -1,5 +1,7 @@
 package com.northshine.spotifystreamer;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,13 +12,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.northshine.spotifystreamer.data.ArtistListViewItem;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
@@ -33,7 +42,7 @@ import retrofit.client.Response;
  */
 public class MainActivityFragment extends Fragment {
 
-    private ArrayAdapter<String> mArtistListViewAdapter;
+    private ArtistListViewAdapter mArtistListViewAdapter;
 
     public MainActivityFragment() {
     }
@@ -55,19 +64,18 @@ public class MainActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         //View artistView = inflater.inflate(R.layout.fragment_artist_list_item, container, false);
-        List<String> artistList = new ArrayList<>();
-        artistList.add("Nothing!");
-        mArtistListViewAdapter = new ArrayAdapter<>(getActivity(), R.layout.fragment_text, R.id.someText, artistList);
+        List<ArtistListViewItem> artistList = new ArrayList<>();
+        mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistList);
         ListView lv = (ListView) rootView.findViewById(R.id.artistListView);
         lv.setAdapter(mArtistListViewAdapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String artistText = mArtistListViewAdapter.getItem(position);
-                Toast.makeText(getActivity(), artistText, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                String artistText = mArtistListViewAdapter.getItem(position);
+//                Toast.makeText(getActivity(), artistText, Toast.LENGTH_SHORT).show();
+//            }
+//        });
         return rootView;
     }
 
@@ -115,9 +123,17 @@ public class MainActivityFragment extends Fragment {
                     Log.v(LOG_TAG, "ArtistsPager returned " + artistsPager.artists.total);
                     mArtistListViewAdapter.clear();
                     for (Artist artist : artistsPager.artists.items) {
-                        String info = artist.id + " " + artist.name + " (" + artist.images.size() +")";
-                        Log.v(LOG_TAG, " - " + info);
-                        mArtistListViewAdapter.add(info);
+                        String name = artist.name + " (" + artist.id + ")";
+                        Log.v(LOG_TAG, " - " + name);
+                        final String imageUrl = artist.images.size() > 0 && artist.images.get(0) != null ? artist.images.get(0).url : null;
+                        FetchArtistThumbnailTask fetchArtistThumbnailTask = new FetchArtistThumbnailTask();
+                        Bitmap thumb = null;
+                        try {
+                            thumb = fetchArtistThumbnailTask.execute(imageUrl).get(10, TimeUnit.SECONDS);
+                        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                            // ignore
+                        }
+                        mArtistListViewAdapter.add(new ArtistListViewItem(name, thumb));
                     }
                 }
 
@@ -128,6 +144,36 @@ public class MainActivityFragment extends Fragment {
             });
 
             return null;
+        }
+    }
+
+    public class FetchArtistThumbnailTask extends AsyncTask<String, Void, Bitmap> {
+
+        private final String LOG_TAG = FetchArtistThumbnailTask.class.getSimpleName();
+
+        final int THUMBNAIL_SIZE = 64;
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+
+            Log.v(LOG_TAG, "Fetching image for url " + params[0]);
+            Bitmap bm = null;
+            if (params[0] != null) {
+                try {
+                    URL aURL = new URL(params[0]);
+                    URLConnection conn = aURL.openConnection();
+                    conn.connect();
+                    InputStream is = conn.getInputStream();
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    Bitmap bigbm = BitmapFactory.decodeStream(bis);
+                    bm = Bitmap.createScaledBitmap(bigbm, THUMBNAIL_SIZE, THUMBNAIL_SIZE, false);
+                    bis.close();
+                    is.close();
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, "Error getting bitmap", e);
+                }
+            }
+            return bm;
         }
 
     }
