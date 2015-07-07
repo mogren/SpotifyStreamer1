@@ -64,8 +64,8 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        // TODO: Oncklick for search field
 
-        //View artistView = inflater.inflate(R.layout.fragment_artist_list_item, container, false);
         List<ArtistListViewItem> artistList = new ArrayList<>();
         mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistList);
         ListView lv = (ListView) rootView.findViewById(R.id.artistListView);

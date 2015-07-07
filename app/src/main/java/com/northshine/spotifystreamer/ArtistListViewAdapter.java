@@ -17,8 +17,6 @@ import java.util.List;
  */
 public class ArtistListViewAdapter extends ArrayAdapter<ArtistListViewItem> {
 
-    private final String LOG_TAG = ArtistListViewAdapter.class.getSimpleName();
-
     public ArtistListViewAdapter(Context context, List<ArtistListViewItem> androidFlavors) {
         super(context, 0, androidFlavors);
     }
