@@ -12,7 +12,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.northshine.spotifystreamer.data.ArtistListViewItem;
 
@@ -68,14 +70,14 @@ public class MainActivityFragment extends Fragment {
         mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistList);
         ListView lv = (ListView) rootView.findViewById(R.id.artistListView);
         lv.setAdapter(mArtistListViewAdapter);
-//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                String artistText = mArtistListViewAdapter.getItem(position);
-//                Toast.makeText(getActivity(), artistText, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String artistText = mArtistListViewAdapter.getItem(position).getName();
+                Toast.makeText(getActivity(), artistText, Toast.LENGTH_SHORT).show();
+            }
+        });
         return rootView;
     }
 
