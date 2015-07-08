@@ -6,4 +6,5 @@
     <string name="artist_name_text">Some artist\'s name</string>
     <string name="title_activity_artist_list_item">ArtistListItemActivity</string>
     <string name="action_refresh">Refresh</string>
+    <string name="title_activity_top_tracks">TopTracksActivity</string>
 </resources>

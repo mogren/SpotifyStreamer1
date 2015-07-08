@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.northshine.spotifystreamer.data.ArtistListViewItem;
@@ -46,6 +47,8 @@ public class MainActivityFragment extends Fragment {
 
     private ArtistListViewAdapter mArtistListViewAdapter;
 
+    private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
+
     public MainActivityFragment() {
     }
 
@@ -66,6 +69,23 @@ public class MainActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         // TODO: Oncklick for search field
 
+        SearchView searchView = (SearchView) rootView.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Toast.makeText(getActivity(), "Searching for : " + s, Toast.LENGTH_SHORT).show();
+                FetchArtistInfoTask artistInfoTask = new FetchArtistInfoTask();
+                artistInfoTask.execute(s);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
         List<ArtistListViewItem> artistList = new ArrayList<>();
         mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistList);
         ListView lv = (ListView) rootView.findViewById(R.id.artistListView);
@@ -75,11 +95,13 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String artistText = mArtistListViewAdapter.getItem(position).getName();
+                Log.v(LOG_TAG, "Toast " + artistText);
                 Toast.makeText(getActivity(), artistText, Toast.LENGTH_SHORT).show();
             }
         });
         return rootView;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -124,6 +146,9 @@ public class MainActivityFragment extends Fragment {
                 public void success(ArtistsPager artistsPager, Response response) {
                     Log.v(LOG_TAG, "ArtistsPager returned " + artistsPager.artists.total);
                     mArtistListViewAdapter.clear();
+                    if (artistsPager.artists.items.isEmpty()) {
+                        Toast.makeText(getActivity(), "No search result found!", Toast.LENGTH_SHORT).show();
+                    }
                     for (Artist artist : artistsPager.artists.items) {
                         String name = artist.name + " (" + artist.id + ")";
                         Log.v(LOG_TAG, " - " + name);
