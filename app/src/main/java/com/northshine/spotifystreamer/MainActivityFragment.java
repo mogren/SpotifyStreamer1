@@ -32,6 +32,8 @@ import java.util.concurrent.TimeoutException;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.AlbumSimple;
+import kaaes.spotify.webapi.android.models.AlbumsPager;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 import retrofit.Callback;
@@ -46,6 +48,8 @@ import retrofit.client.Response;
 public class MainActivityFragment extends Fragment {
 
     private ArtistListViewAdapter mArtistListViewAdapter;
+
+    private String searchText = "Refused";
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
 
@@ -67,7 +71,6 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        // TODO: Oncklick for search field
 
         SearchView searchView = (SearchView) rootView.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -75,8 +78,9 @@ public class MainActivityFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Toast.makeText(getActivity(), "Searching for : " + s, Toast.LENGTH_SHORT).show();
+                searchText = s;
                 FetchArtistInfoTask artistInfoTask = new FetchArtistInfoTask();
-                artistInfoTask.execute(s);
+                artistInfoTask.execute(searchText);
                 return true;
             }
 
@@ -117,7 +121,7 @@ public class MainActivityFragment extends Fragment {
 
         if (id == R.id.action_artist_refresh) {
             FetchArtistInfoTask artistInfoTask = new FetchArtistInfoTask();
-            artistInfoTask.execute("Refused");
+            artistInfoTask.execute(searchText);
             return true;
         }
 
@@ -160,7 +164,7 @@ public class MainActivityFragment extends Fragment {
                         } catch (InterruptedException | ExecutionException | TimeoutException e) {
                             // ignore
                         }
-                        mArtistListViewAdapter.add(new ArtistListViewItem(name, thumb));
+                        mArtistListViewAdapter.add(new ArtistListViewItem(name, artist.id, thumb));
                     }
                 }
 
@@ -203,5 +207,55 @@ public class MainActivityFragment extends Fragment {
             return bm;
         }
 
+    }
+
+    public class FetchArtistSongsTask extends AsyncTask<String, Void, Void> {
+
+        private final String LOG_TAG = FetchArtistSongsTask.class.getSimpleName();
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            // If there's no artist string, just skip the search
+            if (params.length == 0) {
+                return null;
+            }
+
+            RestAdapter restAdapter = new RestAdapter.Builder()
+                    .setEndpoint(SpotifyApi.SPOTIFY_WEB_API_ENDPOINT)
+                    .build();
+
+            SpotifyService spotify = restAdapter.create(SpotifyService.class);
+            spotify.searchAlbums("artist:" + params[0], new Callback<AlbumsPager>() {
+                @Override
+                public void success(AlbumsPager albumsPager, Response response) {
+                    Log.v(LOG_TAG, "AlbumsPager returned " + albumsPager.albums.total);
+                    mArtistListViewAdapter.clear();
+                    if (albumsPager.albums.items.isEmpty()) {
+                        Toast.makeText(getActivity(), "No search result found!", Toast.LENGTH_SHORT).show();
+                    }
+                    for (AlbumSimple albumSimple : albumsPager.albums.items) {
+                        String name = albumSimple.name + " (" + albumSimple.id + ")";
+                        Log.v(LOG_TAG, " - " + name);
+                        final String imageUrl = albumSimple.images.size() > 0 && albumSimple.images.get(0) != null ? albumSimple.images.get(0).url : null;
+                        FetchArtistThumbnailTask fetchArtistThumbnailTask = new FetchArtistThumbnailTask();
+                        Bitmap thumb = null;
+                        try {
+                            thumb = fetchArtistThumbnailTask.execute(imageUrl).get(10, TimeUnit.SECONDS);
+                        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                            // ignore
+                        }
+                        mArtistListViewAdapter.add(new ArtistListViewItem(name, thumb));
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e(LOG_TAG, "API search error " + error);
+                }
+            });
+
+            return null;
+        }
     }
 }
