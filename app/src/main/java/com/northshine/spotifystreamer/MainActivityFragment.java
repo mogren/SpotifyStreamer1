@@ -18,6 +18,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.northshine.spotifystreamer.data.ArtistListViewItem;
+import com.northshine.spotifystreamer.data.TopTrackViewItem;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -46,6 +47,8 @@ import retrofit.client.Response;
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
+
+    private TopTracksViewAdapter mTopTracksViewAdapter;
 
     private ArtistListViewAdapter mArtistListViewAdapter;
 
@@ -103,6 +106,8 @@ public class MainActivityFragment extends Fragment {
                 Toast.makeText(getActivity(), artistText, Toast.LENGTH_SHORT).show();
             }
         });
+        mTopTracksViewAdapter = new TopTracksViewAdapter(getActivity(), new ArrayList<TopTrackViewItem>());
+
         return rootView;
     }
 
@@ -224,13 +229,13 @@ public class MainActivityFragment extends Fragment {
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint(SpotifyApi.SPOTIFY_WEB_API_ENDPOINT)
                     .build();
-
+            final String artistName = params[0];
             SpotifyService spotify = restAdapter.create(SpotifyService.class);
-            spotify.searchAlbums("artist:" + params[0], new Callback<AlbumsPager>() {
+            spotify.searchAlbums("artist:" + artistName, new Callback<AlbumsPager>() {
                 @Override
                 public void success(AlbumsPager albumsPager, Response response) {
                     Log.v(LOG_TAG, "AlbumsPager returned " + albumsPager.albums.total);
-                    mArtistListViewAdapter.clear();
+                    mTopTracksViewAdapter.clear();
                     if (albumsPager.albums.items.isEmpty()) {
                         Toast.makeText(getActivity(), "No search result found!", Toast.LENGTH_SHORT).show();
                     }
@@ -245,7 +250,7 @@ public class MainActivityFragment extends Fragment {
                         } catch (InterruptedException | ExecutionException | TimeoutException e) {
                             // ignore
                         }
-                        mArtistListViewAdapter.add(new ArtistListViewItem(name, thumb));
+                        mTopTracksViewAdapter.add(new TopTrackViewItem(albumSimple.id, artistName, albumSimple.name, thumb));
                     }
                 }
 
