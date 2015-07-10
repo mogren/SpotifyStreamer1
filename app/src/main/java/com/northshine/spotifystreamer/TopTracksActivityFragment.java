@@ -15,7 +15,9 @@ import com.northshine.spotifystreamer.data.TopTrackViewItem;
 import com.northshine.spotifystreamer.tasks.FetchThumbnailTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -75,7 +77,10 @@ public class TopTracksActivityFragment extends Fragment {
                     .build();
             final String artistId = params[0];
             SpotifyService spotify = restAdapter.create(SpotifyService.class);
-            spotify.getArtistTopTrack(artistId, new Callback<Tracks>() {
+            Map<String, Object> options = new HashMap<>();
+            options.put("country", "SE");
+            Log.v(LOG_TAG, "Trying for id " + artistId);
+            spotify.getArtistTopTrack(artistId, options, new Callback<Tracks>() {
 
                 @Override
                 public void success(Tracks tracks, Response response) {

@@ -33,7 +33,7 @@ public class TopTracksViewAdapter extends ArrayAdapter<TopTrackViewItem> {
         // If not, this view already has the layout inflated from a previous call to getView,
         // and we modify the View widgets as usual.
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_top_tracks, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_top_track_item, parent, false);
         }
 
         ImageView image = (ImageView) convertView.findViewById(R.id.artistImageView);
