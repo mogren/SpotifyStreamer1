@@ -57,6 +57,7 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+        setRetainInstance(true);
     }
 
     @Override
@@ -176,10 +177,7 @@ public class MainActivityFragment extends Fragment {
                     Log.e(LOG_TAG, "API search error " + error);
                 }
             });
-
             return null;
         }
     }
-
-
 }
