@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:layout_gravity="center_vertical"
-    android:clickable="true"
+    android:clickable="false"
+    android:focusable="false"
     android:orientation="horizontal"
     android:paddingTop="10dp"
     tools:context=".ArtistListItemActivityFragment">
@@ -14,6 +15,8 @@
         android:id="@+id/artistImageView"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:focusable="false"
+        android:clickable="false"
         android:contentDescription="@string/artist_icon_alt" />
 
     <TextView
@@ -23,6 +26,8 @@
         android:layout_gravity="end"
         android:paddingTop="19dp"
         android:text="@string/artist_name_text"
+        android:focusable="false"
+        android:clickable="false"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

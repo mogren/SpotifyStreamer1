@@ -1,5 +1,6 @@
 package com.northshine.spotifystreamer;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -95,22 +96,29 @@ public class MainActivityFragment extends Fragment {
 
         List<ArtistListViewItem> artistList = new ArrayList<>();
         mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistList);
+        setOnClickForArtist(rootView);
+        mTopTracksViewAdapter = new TopTracksViewAdapter(getActivity(), new ArrayList<TopTrackViewItem>());
+
+        return rootView;
+    }
+
+    private void setOnClickForArtist(View rootView) {
         ListView lv = (ListView) rootView.findViewById(R.id.artistListView);
         lv.setAdapter(mArtistListViewAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String artistText = mArtistListViewAdapter.getItem(position).getName();
-                Log.v(LOG_TAG, "Toast " + artistText);
+                ArtistListViewItem artistListViewItem = mArtistListViewAdapter.getItem(position);
+                String artistText = artistListViewItem.getName();
+                Log.v(LOG_TAG, "Toast " + artistText + " " + artistListViewItem.getId());
                 Toast.makeText(getActivity(), artistText, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), TopTracksActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, artistListViewItem.getId());
+                startActivity(intent);
             }
         });
-        mTopTracksViewAdapter = new TopTracksViewAdapter(getActivity(), new ArrayList<TopTrackViewItem>());
-
-        return rootView;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -171,6 +179,7 @@ public class MainActivityFragment extends Fragment {
                         }
                         mArtistListViewAdapter.add(new ArtistListViewItem(name, artist.id, thumb));
                     }
+                    // TODO: reset on click?
                 }
 
                 @Override
