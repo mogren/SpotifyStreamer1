@@ -9,7 +9,7 @@
     tools:context="com.northshine.spotifystreamer.TopTracksActivityFragment">
 
     <ImageView
-        android:id="@+id/artistImageView"
+        android:id="@+id/albumImageView"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:contentDescription="@string/artist_icon_alt" />
@@ -20,14 +20,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/artistName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/artist_name_text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
             android:id="@+id/trackTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -35,5 +27,14 @@
             android:text="@string/artist_song_title"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        <TextView
+            android:id="@+id/trackArtistName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/artist_name_text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
     </LinearLayout>
+
 </LinearLayout>

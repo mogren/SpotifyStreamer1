@@ -1,7 +1,7 @@
 package com.northshine.spotifystreamer;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,8 +13,8 @@ public class TopTracksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_top_tracks);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-            .add(R.id.topTrackActivity, new TopTracksActivityFragment()).commit();
-            }
+                    .add(R.id.topTrackActivity, new TopTracksActivityFragment()).commit();
+        }
     }
 
 

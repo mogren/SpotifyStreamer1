@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.northshine.spotifystreamer.data.TopTrackViewItem;
@@ -46,17 +47,17 @@ public class TopTracksActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_top_tracks, container, false);
+
         List<TopTrackViewItem> trackViewItems = new ArrayList<>();
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             String artistId = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Log.v(LOG_TAG, artistId);
             FetchArtistSongsTask fetchArtistSongsTask = new FetchArtistSongsTask();
             fetchArtistSongsTask.execute(artistId);
         }
-
+        ListView trackListView = (ListView) rootView.findViewById(R.id.trackListView);
         mTopTracksViewAdapter = new TopTracksViewAdapter(getActivity(), trackViewItems);
-
+        trackListView.setAdapter(mTopTracksViewAdapter);
         return rootView;
     }
 

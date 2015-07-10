@@ -4,8 +4,8 @@
     <string name="action_settings">Settings</string>
     <string name="artist_icon_alt">ArtistIcon</string>
     <string name="artist_name_text">Some artist\'s name</string>
-    <string name="title_activity_artist_list_item">Artist ListItem Activity</string>
+    <string name="title_activity_artist_list_item">Artist</string>
     <string name="action_refresh">Refresh</string>
-    <string name="title_activity_top_tracks">Top Tracks Activity</string>
+    <string name="title_activity_top_tracks">Top Track</string>
     <string name="artist_song_title">Some song title</string>
 </resources>

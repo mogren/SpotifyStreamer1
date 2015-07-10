@@ -8,8 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.northshine.spotifystreamer.R;
-import com.northshine.spotifystreamer.data.ArtistListViewItem;
 import com.northshine.spotifystreamer.data.TopTrackViewItem;
 
 import java.util.List;
@@ -36,11 +34,14 @@ public class TopTracksViewAdapter extends ArrayAdapter<TopTrackViewItem> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_top_track_item, parent, false);
         }
 
-        ImageView image = (ImageView) convertView.findViewById(R.id.artistImageView);
+        ImageView image = (ImageView) convertView.findViewById(R.id.albumImageView);
         image.setImageBitmap(artistListViewItem.getImage());
 
-        TextView versionNameView = (TextView) convertView.findViewById(R.id.artistTextView);
-        versionNameView.setText(artistListViewItem.getArtist());
+        TextView trackTitle = (TextView) convertView.findViewById(R.id.trackTitle);
+        trackTitle.setText(artistListViewItem.getTitle());
+
+        TextView trackArtistName = (TextView) convertView.findViewById(R.id.trackArtistName);
+        trackArtistName.setText(artistListViewItem.getArtist());
 
         return convertView;
     }
