@@ -43,7 +43,9 @@ public class MainActivityFragment extends Fragment {
 
     private ArtistListViewAdapter mArtistListViewAdapter;
 
-    private String searchText = "Refused";
+    private SearchView searchView;
+
+    private String searchText = "";
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
 
@@ -66,13 +68,14 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        SearchView searchView = (SearchView) rootView.findViewById(R.id.searchView);
+        searchView = (SearchView) rootView.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Toast.makeText(getActivity(), "Searching for : " + s, Toast.LENGTH_SHORT).show();
                 searchText = s;
+                searchView.clearFocus();
                 FetchArtistInfoTask artistInfoTask = new FetchArtistInfoTask();
                 artistInfoTask.execute(searchText);
                 return true;
@@ -100,7 +103,6 @@ public class MainActivityFragment extends Fragment {
                 ArtistListViewItem artistListViewItem = mArtistListViewAdapter.getItem(position);
                 String artistText = artistListViewItem.getName();
                 Log.v(LOG_TAG, "Toast " + artistText + " " + artistListViewItem.getId());
-                Toast.makeText(getActivity(), artistText, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), TopTracksActivity.class)
                         .putExtra(Intent.EXTRA_TEXT, artistListViewItem.getId());
                 startActivity(intent);
@@ -135,7 +137,6 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected Void doInBackground(String... params) {
-
             // If there's no artist string, just skip the search
             if (params.length == 0) {
                 return null;
@@ -179,4 +180,6 @@ public class MainActivityFragment extends Fragment {
             return null;
         }
     }
+
+
 }
