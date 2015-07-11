@@ -88,6 +88,7 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+        // TODO: use saved instance instead!
         List<ArtistListViewItem> artistList = new ArrayList<>();
         mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistList);
         setOnClickForArtist(rootView);
