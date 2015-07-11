@@ -1,6 +1,5 @@
 package com.northshine.spotifystreamer.data;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,12 +10,12 @@ public class ArtistListViewItem implements Parcelable {
 
     private String name;
     private String id;
-    private Bitmap image;
+    private String imageUrl;
 
-    public ArtistListViewItem(String name, String id, Bitmap image) {
+    public ArtistListViewItem(String name, String id, String imageUrl) {
         this.name = name;
         this.id = id;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 
     public String getName() {
@@ -27,14 +26,14 @@ public class ArtistListViewItem implements Parcelable {
         return id;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     protected ArtistListViewItem(Parcel in) {
         name = in.readString();
         id = in.readString();
-        image = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
+        imageUrl = in.readString();
     }
 
     @Override
@@ -46,7 +45,7 @@ public class ArtistListViewItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(id);
-        dest.writeValue(image);
+        dest.writeString(imageUrl);
     }
 
     @SuppressWarnings("unused")

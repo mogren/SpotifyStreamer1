@@ -1,6 +1,5 @@
 package com.northshine.spotifystreamer.data;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,13 +11,13 @@ public class TopTrackViewItem implements Parcelable {
     private String id;
     private String artist;
     private String title;
-    private Bitmap image; // drawable reference id
+    private String imageUrl;
 
-    public TopTrackViewItem(String id, String artist, String title, Bitmap image) {
+    public TopTrackViewItem(String id, String artist, String title, String imageUrl) {
         this.id = id;
         this.artist = artist;
         this.title = title;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 
     public String getId() {
@@ -33,15 +32,15 @@ public class TopTrackViewItem implements Parcelable {
         return title;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     protected TopTrackViewItem(Parcel in) {
         id = in.readString();
         artist = in.readString();
         title = in.readString();
-        image = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
+        imageUrl = in.readString();
     }
 
     @Override
@@ -54,7 +53,7 @@ public class TopTrackViewItem implements Parcelable {
         dest.writeString(id);
         dest.writeString(artist);
         dest.writeString(title);
-        dest.writeValue(image);
+        dest.writeString(imageUrl);
     }
 
     @SuppressWarnings("unused")

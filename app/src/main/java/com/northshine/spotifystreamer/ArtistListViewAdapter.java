@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.northshine.spotifystreamer.data.ArtistListViewItem;
 
 import java.util.List;
@@ -17,8 +18,8 @@ import java.util.List;
  */
 public class ArtistListViewAdapter extends ArrayAdapter<ArtistListViewItem> {
 
-    public ArtistListViewAdapter(Context context, List<ArtistListViewItem> androidFlavors) {
-        super(context, 0, androidFlavors);
+    public ArtistListViewAdapter(Context context, List<ArtistListViewItem> artistListViewItems) {
+        super(context, 0, artistListViewItems);
     }
 
     @Override
@@ -34,8 +35,14 @@ public class ArtistListViewAdapter extends ArrayAdapter<ArtistListViewItem> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_artist_list_item, parent, false);
         }
 
+        String url = artistListViewItem.getImageUrl();
         ImageView image = (ImageView) convertView.findViewById(R.id.artistImageView);
-        image.setImageBitmap(artistListViewItem.getImage());
+        Glide.with(getContext())
+                .load(url)
+                .centerCrop()
+                .placeholder(R.drawable.abc_spinner_mtrl_am_alpha)
+                .crossFade()
+                .into(image);
 
         TextView versionNameView = (TextView) convertView.findViewById(R.id.artistTextView);
         versionNameView.setText(artistListViewItem.getName());

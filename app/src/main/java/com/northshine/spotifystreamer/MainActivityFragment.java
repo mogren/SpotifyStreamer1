@@ -1,7 +1,6 @@
 package com.northshine.spotifystreamer;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,13 +17,8 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.northshine.spotifystreamer.data.ArtistListViewItem;
-import com.northshine.spotifystreamer.tasks.FetchThumbnailTask;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
@@ -43,6 +37,8 @@ public class MainActivityFragment extends Fragment {
 
     private ArtistListViewAdapter mArtistListViewAdapter;
 
+    private ArrayList<ArtistListViewItem> artistListViewItems;
+
     private SearchView searchView;
 
     private String searchText = "";
@@ -58,11 +54,22 @@ public class MainActivityFragment extends Fragment {
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
         setRetainInstance(true);
+        if (savedInstanceState == null || !savedInstanceState.containsKey("artists")) {
+            artistListViewItems = new ArrayList<>();
+        } else {
+            artistListViewItems = savedInstanceState.getParcelableArrayList("artists");
+        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("artists", artistListViewItems);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -88,9 +95,7 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
-        // TODO: use saved instance instead!
-        List<ArtistListViewItem> artistList = new ArrayList<>();
-        mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistList);
+        mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistListViewItems);
         setOnClickForArtist(rootView);
         return rootView;
     }
@@ -158,17 +163,8 @@ public class MainActivityFragment extends Fragment {
                         Toast.makeText(getActivity(), "No search result found!", Toast.LENGTH_SHORT).show();
                     }
                     for (Artist artist : artistsPager.artists.items) {
-                        String name = artist.name + " (" + artist.id + ")";
-                        Log.v(LOG_TAG, " - " + name);
                         final String imageUrl = artist.images.size() > 0 && artist.images.get(0) != null ? artist.images.get(0).url : null;
-                        FetchThumbnailTask fetchArtistThumbnailTask = new FetchThumbnailTask();
-                        Bitmap thumb = null;
-                        try {
-                            thumb = fetchArtistThumbnailTask.execute(imageUrl).get(10, TimeUnit.SECONDS);
-                        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                            // ignore
-                        }
-                        mArtistListViewAdapter.add(new ArtistListViewItem(name, artist.id, thumb));
+                        mArtistListViewAdapter.add(new ArtistListViewItem(artist.name, artist.id, imageUrl));
                     }
                     // TODO: reset on click?
                 }

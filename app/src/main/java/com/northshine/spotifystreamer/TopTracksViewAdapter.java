@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.northshine.spotifystreamer.data.TopTrackViewItem;
 
 import java.util.List;
@@ -17,14 +18,14 @@ import java.util.List;
  */
 public class TopTracksViewAdapter extends ArrayAdapter<TopTrackViewItem> {
 
-    public TopTracksViewAdapter(Context context, List<TopTrackViewItem> androidFlavors) {
-        super(context, 0, androidFlavors);
+    public TopTracksViewAdapter(Context context, List<TopTrackViewItem> topTrackViewItems) {
+        super(context, 0, topTrackViewItems);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Gets the AndroidFlavor object from the ArrayAdapter at the appropriate position
-        TopTrackViewItem artistListViewItem = getItem(position);
+        final TopTrackViewItem artistListViewItem = getItem(position);
 
         // Adapters recycle views to AdapterViews.
         // If this is a new View object we're getting, then inflate the layout.
@@ -33,9 +34,14 @@ public class TopTracksViewAdapter extends ArrayAdapter<TopTrackViewItem> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_top_track_item, parent, false);
         }
-
+        String url = artistListViewItem.getImageUrl();
         ImageView image = (ImageView) convertView.findViewById(R.id.albumImageView);
-        image.setImageBitmap(artistListViewItem.getImage());
+        Glide.with(getContext())
+                .load(url)
+                .centerCrop()
+                .placeholder(R.drawable.abc_spinner_mtrl_am_alpha)
+                .crossFade()
+                .into(image);
 
         TextView trackTitle = (TextView) convertView.findViewById(R.id.trackTitle);
         trackTitle.setText(artistListViewItem.getTitle());
