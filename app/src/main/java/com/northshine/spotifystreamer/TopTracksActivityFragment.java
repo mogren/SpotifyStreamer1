@@ -95,14 +95,7 @@ public class TopTracksActivityFragment extends Fragment {
                         String name = track.name + " (" + track.id + ")";
                         Log.v(LOG_TAG, " - " + name);
                         final String imageUrl = track.album.images.size() > 0 && track.album.images.get(0) != null ? track.album.images.get(0).url : null;
-                        FetchThumbnailTask fetchArtistThumbnailTask = new FetchThumbnailTask();
-                        Bitmap thumb = null;
-                        try {
-                            thumb = fetchArtistThumbnailTask.execute(imageUrl).get(10, TimeUnit.SECONDS);
-                        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                            // ignore
-                        }
-                        mTopTracksViewAdapter.add(new TopTrackViewItem(track.id, track.artists.get(0).name, track.name, thumb));
+                        mTopTracksViewAdapter.add(new TopTrackViewItem(track.id, track.artists.get(0).name, track.name, imageUrl));
                     }
                 }
 
