@@ -79,7 +79,6 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
         searchView = (SearchView) rootView.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -98,9 +97,10 @@ public class MainActivityFragment extends Fragment {
                 return false;
             }
         });
-
         if (artistListViewItems == null) {
             Log.v(LOG_TAG, "No artistListViewItems");
+        } else {
+            Log.v(LOG_TAG, "artistListViewItems: " + artistListViewItems.size());
         }
         mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistListViewItems);
         setOnClickForArtist(rootView);

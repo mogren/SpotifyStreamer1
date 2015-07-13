@@ -12,12 +12,7 @@ public class TopTracksActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_tracks);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.topTrackActivity, new TopTracksActivityFragment()).commit();
-        }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

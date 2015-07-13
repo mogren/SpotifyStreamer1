@@ -34,16 +34,28 @@ public class TopTracksActivityFragment extends Fragment {
 
     private TopTracksViewAdapter mTopTracksViewAdapter;
 
+    private ArrayList<TopTrackViewItem> trackListViewItems;
+
     private final String LOG_TAG = TopTracksActivityFragment.class.getSimpleName();
 
     public TopTracksActivityFragment() {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        if (savedInstanceState == null || !savedInstanceState.containsKey("tracks")) {
+            trackListViewItems = new ArrayList<>();
+        } else {
+            trackListViewItems = savedInstanceState.getParcelableArrayList("tracks");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_top_tracks, container, false);
 
-        List<TopTrackViewItem> trackViewItems = new ArrayList<>();
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             String artistId = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -51,9 +63,15 @@ public class TopTracksActivityFragment extends Fragment {
             fetchArtistSongsTask.execute(artistId);
         }
         ListView trackListView = (ListView) rootView.findViewById(R.id.trackListView);
-        mTopTracksViewAdapter = new TopTracksViewAdapter(getActivity(), trackViewItems);
+        mTopTracksViewAdapter = new TopTracksViewAdapter(getActivity(), trackListViewItems);
         trackListView.setAdapter(mTopTracksViewAdapter);
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("tracks", trackListViewItems);
     }
 
     public class FetchArtistSongsTask extends AsyncTask<String, Void, Void> {
