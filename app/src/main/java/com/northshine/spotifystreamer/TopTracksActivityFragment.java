@@ -1,7 +1,6 @@
 package com.northshine.spotifystreamer;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,15 +12,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.northshine.spotifystreamer.data.TopTrackViewItem;
-import com.northshine.spotifystreamer.tasks.FetchThumbnailTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;

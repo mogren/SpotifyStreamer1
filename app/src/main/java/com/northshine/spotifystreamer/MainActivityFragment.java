@@ -54,6 +54,10 @@ public class MainActivityFragment extends Fragment {
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
         setRetainInstance(true);
+        restoreArtistItems(savedInstanceState);
+    }
+
+    private void restoreArtistItems(Bundle savedInstanceState) {
         if (savedInstanceState == null || !savedInstanceState.containsKey("artists")) {
             artistListViewItems = new ArrayList<>();
         } else {
@@ -68,8 +72,8 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("artists", artistListViewItems);
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("artists", artistListViewItems);
     }
 
     @Override
@@ -95,6 +99,9 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+        if (artistListViewItems == null) {
+            Log.v(LOG_TAG, "No artistListViewItems");
+        }
         mArtistListViewAdapter = new ArtistListViewAdapter(getActivity(), artistListViewItems);
         setOnClickForArtist(rootView);
         return rootView;
@@ -108,10 +115,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 ArtistListViewItem artistListViewItem = mArtistListViewAdapter.getItem(position);
-                String artistText = artistListViewItem.getName();
-                Log.v(LOG_TAG, "Toast " + artistText + " " + artistListViewItem.getId());
-                Intent intent = new Intent(getActivity(), TopTracksActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, artistListViewItem.getId());
+                Intent intent = new Intent(getActivity(), TopTracksActivity.class).putExtra(Intent.EXTRA_TEXT, artistListViewItem.getId());
                 startActivity(intent);
             }
         });
