@@ -18,6 +18,9 @@ import java.util.List;
  */
 public class TopTracksViewAdapter extends ArrayAdapter<TopTrackViewItem> {
 
+    // A holder will hold the reference to your views.
+    ViewHolder holder;
+
     public TopTracksViewAdapter(Context context, List<TopTrackViewItem> topTrackViewItems) {
         super(context, 0, topTrackViewItems);
     }
@@ -33,22 +36,30 @@ public class TopTracksViewAdapter extends ArrayAdapter<TopTrackViewItem> {
         // and we modify the View widgets as usual.
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_top_track_item, parent, false);
+            holder = new ViewHolder();
+            holder.albumImage = (ImageView) convertView.findViewById(R.id.albumImageView);
+            holder.trackTitle = (TextView) convertView.findViewById(R.id.trackTitle);
+            holder.artistName = (TextView) convertView.findViewById(R.id.trackArtistName);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
         String url = artistListViewItem.getImageUrl();
-        ImageView image = (ImageView) convertView.findViewById(R.id.albumImageView);
         Glide.with(getContext())
                 .load(url)
                 .centerCrop()
                 .placeholder(R.drawable.abc_spinner_mtrl_am_alpha)
                 .crossFade()
-                .into(image);
+                .into(holder.albumImage);
 
-        TextView trackTitle = (TextView) convertView.findViewById(R.id.trackTitle);
-        trackTitle.setText(artistListViewItem.getTitle());
-
-        TextView trackArtistName = (TextView) convertView.findViewById(R.id.trackArtistName);
-        trackArtistName.setText(artistListViewItem.getArtist());
-
+        holder.trackTitle.setText(artistListViewItem.getTitle());
+        holder.artistName.setText(artistListViewItem.getArtist());
         return convertView;
+    }
+
+    class ViewHolder {
+        ImageView albumImage;
+        TextView trackTitle;
+        TextView artistName;
     }
 }

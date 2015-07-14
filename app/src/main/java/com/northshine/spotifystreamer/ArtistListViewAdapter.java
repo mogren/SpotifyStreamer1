@@ -22,6 +22,9 @@ public class ArtistListViewAdapter extends ArrayAdapter<ArtistListViewItem> {
         super(context, 0, artistListViewItems);
     }
 
+    // A holder will hold the reference to your views.
+    ViewHolder holder;
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Gets the AndroidFlavor object from the ArrayAdapter at the appropriate position
@@ -33,20 +36,29 @@ public class ArtistListViewAdapter extends ArrayAdapter<ArtistListViewItem> {
         // and we modify the View widgets as usual.
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_artist_list_item, parent, false);
+            holder = new ViewHolder();
+            holder.artistImage = (ImageView) convertView.findViewById(R.id.artistImageView);
+            holder.artistName = (TextView) convertView.findViewById(R.id.artistTextView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
         String url = artistListViewItem.getImageUrl();
-        ImageView image = (ImageView) convertView.findViewById(R.id.artistImageView);
         Glide.with(getContext())
                 .load(url)
                 .centerCrop()
                 .placeholder(R.drawable.abc_spinner_mtrl_am_alpha)
                 .crossFade()
-                .into(image);
+                .into(holder.artistImage);
 
-        TextView versionNameView = (TextView) convertView.findViewById(R.id.artistTextView);
-        versionNameView.setText(artistListViewItem.getName());
+        holder.artistName.setText(artistListViewItem.getName());
 
         return convertView;
+    }
+
+    class ViewHolder {
+        ImageView artistImage;
+        TextView artistName;
     }
 }

@@ -57,7 +57,7 @@ public class TopTracksActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_top_tracks, container, false);
 
         Intent intent = getActivity().getIntent();
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT) && trackListViewItems.isEmpty()) {
             String artistId = intent.getStringExtra(Intent.EXTRA_TEXT);
             FetchArtistSongsTask fetchArtistSongsTask = new FetchArtistSongsTask();
             fetchArtistSongsTask.execute(artistId);
