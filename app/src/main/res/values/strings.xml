@@ -8,4 +8,5 @@
     <string name="action_refresh">Refresh</string>
     <string name="title_activity_top_tracks">Top Track</string>
     <string name="artist_song_title">Some song title</string>
+    <string name="title_activity_main_activity_tablet">MainActivityTablet</string>
 </resources>
